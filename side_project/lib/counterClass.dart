@@ -30,6 +30,7 @@ Counter.counterWithName(String name){
 
     if (counterUpdate.inHours > 36) {
       counter.count = 0;
+      counter.lastUpdateTime = DateTime.now();
     }
   }
 }
