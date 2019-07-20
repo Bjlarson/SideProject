@@ -19,7 +19,7 @@ Counter.counterWithName(String name){
     this.counterName = name;
 }
 
-  int increaseCounter(Counter counter) {
+  void increaseCounter(Counter counter) {
     counter.count++;
     counter.lastUpdateTime = DateTime.now();
   }
@@ -32,5 +32,13 @@ Counter.counterWithName(String name){
       counter.count = 0;
       counter.lastUpdateTime = DateTime.now();
     }
+  }
+
+  Map<String, dynamic> toMap() {
+    return{
+      'count' : count,
+      'lastUpdateTime' : lastUpdateTime,
+      'counterName' : counterName,
+    };
   }
 }
