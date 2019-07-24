@@ -19,7 +19,7 @@ Counter.counterWithName(String name){
     this.counterName = name;
 }
 
-  int increaseCounter(Counter counter) {
+  void increaseCounter(Counter counter) {
     counter.count++;
     counter.lastUpdateTime = DateTime.now();
   }

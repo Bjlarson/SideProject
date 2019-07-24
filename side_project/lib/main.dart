@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:side_project/counterClass.dart';
-import 'package:sqflite/sqflite.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,6 +16,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -42,24 +42,33 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              counter.count.toString(),
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
+      body: _buildList(),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: Icon(Icons.add)
+      ),
+    );
+  }
+
+  Widget _buildList() {
+    return ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemBuilder: (context, i) {
+          if (i.isOdd) return Divider();
+
+          return _buildCounterRows(counter);
+        });
+  }
+
+  Widget _buildCounterRows(Counter counter) {
+    return ListTile(
+        title: Text(
+      counter.counterName,
+      style: _biggerFont,
+      ),
+      trailing: Text(
+        counter.count.toString()
       ),
     );
   }
