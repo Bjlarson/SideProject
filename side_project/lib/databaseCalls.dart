@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:side_project/counterClass.dart';
 
 
 class CounterDatabase{
@@ -27,13 +28,24 @@ initDB() async {
 
   return await openDatabase(path, version: 1, onOpen: (db){}, 
   onCreate: (Database db, int version) async {
-    await db.execute("CREATE TABLE streak_counter(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, count INTEGER, lastUpdateTime DATETIME)");
+    await db.execute("CREATE TABLE streak_counter(id INTEGER PRIMARY KEY, name TEXT, count INTEGER, lastUpdateTime DATETIME)");
   });
 }
 
+//insert a new counter
+newCounter(Counter counter) async{
+  final db = await database;  
 
-//insert
+  var raw = await db.rawInsert("INSERT INTO streak_counter(name, count, lastUpdateTime)"
+  " VALUES(?,?,?)", [counter.counterName, counter.count, counter.lastUpdateTime]);
 
-//update
+  return raw;
+}
 
-//delete
+
+
+//update the lastUpdateTime
+
+//update the counter if failed to increment the counter
+
+//delete the counter from the database
