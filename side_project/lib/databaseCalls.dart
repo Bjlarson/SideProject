@@ -29,21 +29,23 @@ initDB() async {
 
   return await openDatabase(path, version: 1, onOpen: (db){}, 
   onCreate: (Database db, int version) async {
-    await db.execute("CREATE TABLE streak_counter(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, count INTEGER, lastUpdateTime DATETIME)");
+    await db.execute("CREATE TABLE streak_counter(id INTEGER PRIMARY KEY, name TEXT, count INTEGER, lastUpdateTime DATETIME)");
   });
 }
 
+//insert a new counter
+newCounter(Counter counter) async{
+  final db = await database;  
 
 //insert
 Future<void> insertCounter(Counter counter) async {
 
   final Database db = await database;
 
-  await db.insert(
-    'streak_counter',
-    counter.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-  );
+  var raw = await db.rawInsert("INSERT INTO streak_counter(name, count, lastUpdateTime)"
+  " VALUES(?,?,?)", [counter.counterName, counter.count, counter.lastUpdateTime]);
+
+  return raw;
 }
 
 //update
@@ -75,8 +77,7 @@ Future<List<Counter>> counter() async {
 }
 */
 
-
-//delete
+//delete the counter from the database
 Future<void> deleteCounter(String name) async {
 
   final db = await database;
@@ -87,3 +88,8 @@ Future<void> deleteCounter(String name) async {
     whereArgs: [name],
   );
 }
+}
+
+//update the lastUpdateTime
+
+//update the counter if failed to increment the counter.
