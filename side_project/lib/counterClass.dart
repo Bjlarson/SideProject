@@ -33,4 +33,12 @@ Counter.counterWithName(String name){
       counter.lastUpdateTime = DateTime.now();
     }
   }
+
+  Map<String, dynamic> toMap() {
+    return{
+      'count' : count,
+      'lastUpdateTime' : lastUpdateTime,
+      'counterName' : counterName,
+    };
+  }
 }

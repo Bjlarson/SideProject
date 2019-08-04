@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:core' as prefix0;
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -36,16 +37,59 @@ initDB() async {
 newCounter(Counter counter) async{
   final db = await database;  
 
+//insert
+Future<void> insertCounter(Counter counter) async {
+
+  final Database db = await database;
+
   var raw = await db.rawInsert("INSERT INTO streak_counter(name, count, lastUpdateTime)"
   " VALUES(?,?,?)", [counter.counterName, counter.count, counter.lastUpdateTime]);
 
   return raw;
 }
 
+//update
+Future<void> updateCounter(Counter counter) async {
+  final db = await database;
 
+  await db.update(
+    'streak_counter',
+    counter.toMap(),
+    where: "name = ?",
+    whereArgs: [counter.counterName],
+    );
+}
+
+//Retrieve
+/*
+Future<List<Counter>> counter() async {
+    final Database db = await database;
+    final List<Map<String ,dynamic>> maps = await db.query('streak_counter');
+
+    return List.generate(maps.length, (i) {
+      return Counter(
+      count: maps[i]['count'],
+      lastUpdateTime: maps[i]['lastUpdateTime'],
+      counterName: maps[i]['counterName'],
+
+      );
+    });
+}
+*/
+
+//delete the counter from the database
+Future<void> deleteCounter(String name) async {
+
+  final db = await database;
+
+  await db.delete(
+    'streak_counter',
+    where: "counterName = ?",
+    whereArgs: [name],
+  );
+}
+}
 
 //update the lastUpdateTime
 
-//update the counter if failed to increment the counter
-
-//delete the counter from the database
+//update the counter if failed to increment the counter.
